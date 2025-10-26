@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misterio en la Mansión Blackwood</title>
+    <!-- Incluimos Tailwind CSS para un diseño moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Incluimos una fuente temática de Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Estilos personalizados */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('https://www.transparenttextures.com/patterns/dark-denim-3.png');
+        }
+        .font-title {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Estilo para los selects */
+        select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%239ca3af' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            appearance: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen p-4 md:p-8">
+
+    <div class="container mx-auto max-w-7xl">
+        
+        <!-- Encabezado -->
+        <header class="text-center mb-8">
+            <h1 class="font-title text-4xl md:text-5xl font-bold text-yellow-400">Clue: Misterio en la Mansión Blackwood</h1>
+            <p class="text-lg text-gray-400 mt-2">Un juego de misterio y deducción</p>
+        </header>
+
+        <!-- Contenedor principal del juego -->
+        <div class="flex flex-col lg:flex-row gap-8">
+
+            <!-- Columna Izquierda: Panel de Investigación -->
+            <div class="lg:w-2/3 space-y-6">
+                <h2 class="font-title text-3xl text-yellow-500 border-b border-gray-700 pb-2">Panel de Investigación</h2>
+                
+                <!-- Sección Sospechosos -->
+                <div>
+                    <h3 class="font-title text-2xl mb-4">Sospechosos</h3>
+                    <div id="personajes-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Las tarjetas de personajes se generarán aquí -->
+                    </div>
+                </div>
+                
+                <!-- Sección Armas -->
+                <div>
+                    <h3 class="font-title text-2xl mb-4">Armas</h3>
+                    <div id="armas-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Las tarjetas de armas se generarán aquí -->
+                    </div>
+                </div>
+
+                <!-- Sección Locaciones -->
+                <div>
+                    <h3 class="font-title text-2xl mb-4">Locaciones</h3>
+                    <div id="locaciones-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Las tarjetas de locaciones se generarán aquí -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Columna Derecha: Notas del Detective -->
+            <div class="lg:w-1/3 space-y-6">
+                <!-- Intentos Restantes -->
+                <div class="bg-gray-800 p-4 rounded-lg shadow-lg">
+                    <h3 class="font-title text-2xl text-yellow-500 mb-3 text-center">Consultas Restantes</h3>
+                    <div id="intentos-visual" class="text-4xl font-mono tracking-widest text-yellow-400 text-center">
+                        ● ● ● ● ●
+                    </div>
+                </div>
+
+                <!-- Última Pista -->
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+                    <h3 class="font-title text-2xl text-yellow-500 mb-4">Última Pista Recibida</h3>
+                    <div class="space-y-3 font-mono text-sm text-gray-300 min-h-[150px]">
+                        <p id="pista-linea-1">Pide tu primera pista...</p>
+                        <p id="pista-linea-2">...</p>
+                        <p id="pista-linea-3">...</p>
+                        <p id="pista-linea-4">...</p>
+                    </div>
+                </div>
+
+                <!-- Acusación Final -->
+                <div class="bg-gray-800 p-6 rounded-lg shadow-lg border-t-4 border-red-600">
+                    <h3 class="font-title text-2xl text-red-500 mb-4">Acusación Final</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label for="combo-personaje-final" class="block text-sm font-medium text-gray-400 mb-1">Culpable:</label>
+                            <select id="combo-personaje-final" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-red-500 focus:border-red-500"></select>
+                        </div>
+                        <div>
+                            <label for="combo-arma-final" class="block text-sm font-medium text-gray-400 mb-1">Arma:</label>
+                            <select id="combo-arma-final" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-red-500 focus:border-red-500"></select>
+                        </div>
+                        <div>
+                            <label for="combo-locacion-final" class="block text-sm font-medium text-gray-400 mb-1">Locación:</label>
+                            <select id="combo-locacion-final" class="w-full bg-gray-700 border border-gray-600 rounded-md p-2 text-white focus:ring-red-500 focus:border-red-500"></select>
+                        </div>
+                        <button id="boton-acusacion-final" class="w-full bg-red-700 hover:bg-red-800 text-white font-bold py-3 px-4 rounded-lg text-lg transition-colors duration-200 shadow-lg">
+                            ¡HACER ACUSACIÓN FINAL!
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Botón de Reinicio -->
+                <button id="boton-reiniciar" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg transition-colors duration-200">
+                    Jugar de Nuevo / Reiniciar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- --- MODALES (Reemplazan a messagebox) --- -->
+
+    <!-- Modal General (Intro / Warning) -->
+    <div id="infoModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4 hidden">
+        <div class="bg-gray-800 rounded-lg shadow-2xl max-w-lg w-full p-6 text-center">
+            <h3 id="infoModal-title" class="font-title text-2xl font-bold mb-4 text-yellow-400"></h3>
+            <div id="infoModal-body" class="text-gray-300 mb-6 whitespace-pre-line"></div>
+            <button id="infoModal-close" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg">
+                Entendido
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmación (Acusación) -->
+    <div id="confirmModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4 hidden">
+        <div class="bg-gray-800 rounded-lg shadow-2xl max-w-lg w-full p-6 text-center">
+            <h3 id="confirmModal-title" class="font-title text-2xl font-bold mb-4 text-red-500">Confirmar Acusación</h3>
+            <div id="confirmModal-body" class="text-gray-300 mb-6 whitespace-pre-line"></div>
+            <div class="flex justify-center gap-4">
+                <button id="confirm-no" class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-6 rounded-lg">
+                    No, cancelar
+                </button>
+                <button id="confirm-yes" class="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-6 rounded-lg">
+                    Sí, acusar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Fin de Juego (Victoria / Derrota) -->
+    <div id="endGameModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4 hidden">
+        <div class="bg-gray-800 rounded-lg shadow-2xl max-w-lg w-full p-6 text-center">
+            <h3 id="endGameModal-title" class="font-title text-3xl font-bold mb-4"></h3>
+            <div id="endGameModal-body" class="text-gray-300 mb-6 whitespace-pre-line"></div>
+            <button id="endGameModal-close" class="bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded-lg">
+                Verdadero
+            </button>
+        </div>
+    </div>
+
+
+    <script>
+// --- 1. ELEMENTOS DEL JUEGO (Tu lógica) ---
+const PERSONAJES = [
+    "Profesor Alejandro Morales",
+    "Victoria \"Vicky\" Rojas",
+    "Coronel Ricardo Montoya",
+    "Doña Isabela Garza",
+    "Licenciado Mateo Solís"
+];
+const ARMAS = [
+    "Candelabro de Plata",
+    "Daga Ornamental",
+    "Revólver Antiguo",
+    "Cuerda de Piano",
+    "Botella de Veneno"
+];
+const LOCACIONES = [
+    "La Biblioteca",
+    "El Salón de Baile",
+    "La Cocina",
+    "El Observatorio",
+    "El Jardín de Invierno"
+];
+
+// --- 2. HISTORIAS (Tu lógica) ---
+const HISTORIAS = [
+    {
+        "culpable": "Licenciado Mateo Solís",
+        "arma": "Daga Ornamental",
+        "locacion": "La Biblioteca",
+        "narrativa": "El Licenciado Solís encontró a Don Armando en la biblioteca a punto de quemar el testamento que lo beneficiaba. Discutieron, y en un arrebato de ira, Solís tomó la daga de la pared y lo atacó para asegurar su herencia."
+    },
+    {
+        "culpable": "Victoria \"Vicky\" Rojas",
+        "arma": "Botella de Veneno",
+        "locacion": "La Cocina",
+        "narrativa": "Don Armando citó a Victoria en la cocina para amenazarla con exponer un escándalo de su pasado. Ella, anticipándose, había tomado veneno del Jardín de Invierno y lo vertió en la copa de vino de Don Armando mientras preparaban una bebida."
+    },
+    {
+        "culpable": "Coronel Ricardo Montoya",
+        "arma": "Revólver Antiguo",
+        "locacion": "El Salón de Baile",
+        "narrativa": "El Coronel confrontó a Don Armando en el Salón de Baile sobre una vieja deuda de honor y una traición que le costó su carrera. La discusión se acaloró y el Coronel, sintiéndose humillado, tomó un revólver de la vitrina y le disparó."
+    },
+    {
+        "culpable": "Doña Isabela Garza",
+        "arma": "Cuerda de Piano",
+        "locacion": "El Jardín de Invierno",
+        "narrativa": "Doña Isabela descubrió que Don Armando planeaba vender la mansión y despedir a todo el personal. Tratando de asustarlo, lo confrontó en el Jardín de Invierno. La situación se salió de control y terminó asfixiándolo con una cuerda de piano."
+    },
+    {
+        "culpable": "Profesor Alejandro Morales",
+        "arma": "Candelabro de Plata",
+        "locacion": "El Observatorio",
+        "narrativa": "El Profesor intentaba robar un valioso mapa estelar del observatorio. Don Armando lo sorprendió. En el forcejeo, el Profesor Morales tomó un pesado candelabro y lo golpeó fatalmente para poder escapar con el mapa."
+    }
+];
+
+// --- 3. BASE DE DATOS DE COARTADAS (Tu lógica) ---
+const ALIBIS_DATABASE = {
+    "personajes": {
+        "Profesor Alejandro Morales": {"dice_locacion": "El Observatorio", "dice_arma": "Candelabro de Plata"},
+        "Victoria \"Vicky\" Rojas": {"dice_locacion": "La Cocina", "dice_arma": "Botella de Veneno"},
+        "Coronel Ricardo Montoya": {"dice_locacion": "El Salón de Baile", "dice_arma": "Revólver Antiguo"},
+        "Doña Isabela Garza": {"dice_locacion": "El Jardín de Invierno", "dice_arma": "Cuerda de Piano"},
+        "Licenciado Mateo Solís": {"dice_locacion": "La Biblioteca", "dice_arma": "Daga Ornamental"}
+    },
+    "locaciones": {
+        "La Biblioteca": {"descripcion": "Limpio. Sin signos de violencia.", "arma_normal": "Daga Ornamental", "persona_normal": "Lic. Solís"},
+        "El Salón de Baile": {"descripcion": "Limpio. Sin signos de violencia.", "arma_normal": "Revólver Antiguo", "persona_normal": "Cnel. Montoya"},
+        "La Cocina": {"descripcion": "Limpio. Sin signos de violencia.", "arma_normal": "Botella de Veneno", "persona_normal": "Vicky Rojas"},
+        "El Observatorio": {"descripcion": "Limpio. Sin signos de violencia.", "arma_normal": "Candelabro de Plata", "persona_normal": "Prof. Morales"},
+        "El Jardín de Invierno": {"descripcion": "Limpio. Sin signos de violencia.", "arma_normal": "Cuerda de Piano", "persona_normal": "Doña Isabela"}
+    },
+    "armas": {
+        "Candelabro de Plata": {"descripcion": "El arma está limpia. No fue usada.", "lugar_normal": "El Observatorio", "persona_normal": "Prof. Morales"},
+        "Daga Ornamental": {"descripcion": "El arma está limpia. No fue usada.", "lugar_normal": "La Biblioteca", "persona_normal": "Lic. Solís"},
+        "Revólver Antiguo": {"descripcion": "El arma está limpia. No fue disparada.", "lugar_normal": "El Salón de Baile", "persona_normal": "Cnel. Montoya"},
+        "Cuerda de Piano": {"descripcion": "El arma está limpia. No fue usada.", "lugar_normal": "El Jardín de Invierno", "persona_normal": "Doña Isabela"},
+        "Botella de Veneno": {"descripcion": "El arma está limpia. Sello intacto.", "lugar_normal": "La Cocina", "persona_normal": "Vicky Rojas"}
+    }
+};
+
+// --- 4. VARIABLES GLOBALES DEL JUEGO (Tu lógica) ---
+let solucion_secreta = {};
+let intentos_restantes = 5;
+const MAX_INTENTOS = 5;
+
+const INTENTOS_VISUAL = [
+    "● ● ● ● ●", // 5
+    "○ ● ● ● ●", // 4
+    "○ ○ ● ● ●", // 3
+    "○ ○ ○ ● ●", // 2
+    "○ ○ ○ ○ ●", // 1
+    "○ ○ ○ ○ ○"  // 0
+];
+
+// --- 5. Referencias a Elementos del DOM ---
+let labelIntentosVisual, pistaLinea1, pistaLinea2, pistaLinea3, pistaLinea4;
+let comboPersonajeFinal, comboArmaFinal, comboLocacionFinal;
+let botonAcusacionFinal, botonReiniciar;
+let personajesContainer, armasContainer, locacionesContainer;
+let infoModal, infoModalTitle, infoModalBody, infoModalClose;
+let confirmModal, confirmModalTitle, confirmModalBody, confirmYes, confirmNo;
+let endGameModal, endGameModalTitle, endGameModalBody, endGameModalClose;
+
+// --- 6. FUNCIONES DE LA LÓGICA DEL JUEGO (Tus funciones, adaptadas a JS) ---
+
+function elegir_nueva_solucion() {
+    solucion_secreta = HISTORIAS[Math.floor(Math.random() * HISTORIAS.length)];
+    // Descomenta para ver la solución (hacer trampa)
+    // console.log(`DEBUG: ${solucion_secreta.culpable}, ${solucion_secreta.arma}, ${solucion_secreta.locacion}`);
+}
+
+function reiniciar_juego() {
+    intentos_restantes = MAX_INTENTOS;
+    elegir_nueva_solucion();
+    
+    // Limpiar menús de acusación
+    comboPersonajeFinal.value = '';
+    comboArmaFinal.value = '';
+    comboLocacionFinal.value = '';
+    
+    // Reiniciar el panel de pistas
+    actualizar_panel_pista(
+        "Pide tu primera pista...",
+        "...",
+        "...",
+        "..."
+    );
+    
+    // Actualizar etiquetas y botones
+    actualizar_etiqueta_intentos();
+    habilitar_controles_investigacion(true);
+    botonAcusacionFinal.disabled = false;
+    botonAcusacionFinal.classList.remove('opacity-50', 'cursor-not-allowed');
+
+    // Mostrar la intro en el modal
+    mostrarInfoModal("¡Un Asesinato en la Mansión!",
+`¡Oh, no!
+¡Alguien asesinó a Don Armando Blackwood!
+
+Hay un culpable entre nosotros. Es tu deber averiguar quién es.
+
+Tienes 5 consultas para revisar los informes antes de hacer tu acusación final.
+
+¡Usa tu memoria y encuentra al culpable!`);
+}
+
+function habilitar_controles_investigacion(habilitar) {
+    const botones = document.querySelectorAll('.boton-investigar');
+    botones.forEach(boton => {
+        boton.disabled = !habilitar;
+        boton.classList.toggle('opacity-50', !habilitar);
+        boton.classList.toggle('cursor-not-allowed', !habilitar);
+    });
+}
+
+function actualizar_etiqueta_intentos() {
+    labelIntentosVisual.textContent = INTENTOS_VISUAL[MAX_INTENTOS - intentos_restantes];
+    
+    if (intentos_restantes === 0) {
+        habilitar_controles_investigacion(false);
+        mostrarInfoModal("¡Sin Consultas!", "Se acabaron tus consultas. Es hora de hacer tu acusación final.");
+    }
+}
+
+function actualizar_panel_pista(p1, p2, p3, p4) {
+    pistaLinea1.textContent = p1;
+    pistaLinea2.textContent = p2;
+    pistaLinea3.textContent = p3;
+    pistaLinea4.textContent = p4;
+}
+
+function investigar(categoria, valor) {
+    if (intentos_restantes <= 0) return;
+
+    // No es necesario comprobar si el valor está vacío,
+    // ya que el botón de la tarjeta proporciona el valor.
+        
+    intentos_restantes -= 1;
+    
+    // --- Generación de las 4 líneas de pista (Lógica idéntica a la tuya) ---
+    let p1 = "", p2 = "", p3 = "", p4 = "";
+    
+    if (categoria === 'personaje') {
+        let p1_base = `${valor} dice que estuvo en `;
+        if (valor === solucion_secreta.culpable) {
+            // Es el culpable. REPORTE CONTRADICTORIO.
+            const otrasLocaciones = LOCACIONES.filter(l => l !== solucion_secreta.locacion);
+            const alibi_falso_lugar = otrasLocaciones[Math.floor(Math.random() * otrasLocaciones.length)];
+            
+            const otrasArmas = ARMAS.filter(a => a !== solucion_secreta.arma);
+            const alibi_falso_arma = otrasArmas[Math.floor(Math.random() * otrasArmas.length)];
+
+            p1 = p1_base + `${alibi_falso_lugar} y que vio el objeto ${alibi_falso_arma}.`;
+            p2 = `Los interrogatorios NO pudieron confirmar la coartada de ${valor}. Nadie lo vio allí.`;
+            p3 = `Los reportes forenses SÍ estaban operativos en ${alibi_falso_lugar}.`;
+            p4 = `Los reportes NO encontraron el ${solucion_secreta.arma} en ${alibi_falso_lugar}.`;
+        } else {
+            // Es inocente. REPORTE CONSISTENTE.
+            const coartada_real = ALIBIS_DATABASE.personajes[valor];
+            p1 = p1_base + `${coartada_real.dice_locacion} y que vio el objeto ${coartada_real.dice_arma}.`;
+            p2 = `Los interrogatorios SÍ registraron a ${valor} en esa zona.`;
+            p3 = `Los reportes forenses SÍ estaban operativos en ${coartada_real.dice_locacion}.`;
+            p4 = `Los reportes SÍ han detectado el objeto ${coartada_real.dice_arma}.`;
+        }
+
+    } else if (categoria === 'locacion') {
+        p1 = `Reporte de Locación: ${valor}.`;
+        if (valor === solucion_secreta.locacion) {
+            // Es la escena del crimen.
+            p2 = "Reporte Forense: ¡Se encontraron signos de lucha y evidencia física!";
+            p3 = `Reporte de Evidencia: Se encontró el objeto ${solucion_secreta.arma} en esta locación.`;
+            p4 = `Reporte de Sospechoso: Se vieron huellas de ${solucion_secreta.culpable} en esta locación.`;
+        } else {
+            // Es una locación inocente.
+            const info_normal = ALIBIS_DATABASE.locaciones[valor];
+            p2 = `Reporte Forense: La locación está limpia. ${info_normal.descripcion}`;
+            p3 = `Reporte de Evidencia: Se encontró el objeto ${info_normal.arma_normal} (en su lugar habitual).`;
+            p4 = `Reporte de Sospechoso: Se vieron huellas de ${info_normal.persona_normal} (su 'dueño' habitual).`;
+        }
+            
+    } else if (categoria === 'arma') {
+        p1 = `Reporte de Arma: ${valor}.`;
+        if (valor === solucion_secreta.arma) {
+            // Es el arma homicida.
+            p2 = "Reporte Forense: ¡El arma tiene rastros de sangre de la víctima y huellas parciales!";
+            p3 = `Reporte de Evidencia: Fue encontrada en ${solucion_secreta.locacion}.`;
+            p4 = `Reporte de Sospechoso: Las huellas parciales coinciden con ${solucion_secreta.culpable}.`;
+        } else {
+            // Es un arma inocente.
+            const info_normal = ALIBIS_DATABASE.armas[valor];
+            p2 = `Reporte Forense: ${info_normal.descripcion}`;
+            p3 = `Reporte de Evidencia: Fue encontrada en ${info_normal.lugar_normal} (su lugar habitual).`;
+            p4 = `Reporte de Sospechoso: Tiene huellas de ${info_normal.persona_normal} (su 'dueño' habitual).`;
+        }
+    }
+    
+    // Actualizar el panel visual
+    actualizar_panel_pista(p1, p2, p3, p4);
+    // Actualizar el contador visual
+    actualizar_etiqueta_intentos();
+}
+
+function hacer_acusacion_final() {
+    const culpable_guess = comboPersonajeFinal.value;
+    const arma_guess = comboArmaFinal.value;
+    const locacion_guess = comboLocacionFinal.value;
+
+    if (!culpable_guess || !arma_guess || !locacion_guess) {
+        mostrarInfoModal("Acusación Incompleta", "Debes seleccionar un culpable, un arma y una locación para tu acusación final.");
+        return;
+    }
+
+    const mensaje = `¿Estás seguro de que quieres acusar a\n${culpable_guess}\ncon el ${arma_guess}\nen ${locacion_guess}?\n\nEsta acción es final y terminará el juego.`;
+
+    // Mostrar modal de confirmación
+    mostrarConfirmModal(mensaje, () => {
+        // Esta función se ejecuta si el usuario hace clic en "Sí"
+        procesar_acusacion(culpable_guess, arma_guess, locacion_guess);
+    });
+}
+
+function procesar_acusacion(culpable_guess, arma_guess, locacion_guess) {
+    habilitar_controles_investigacion(false); // <--- CORRECCIÓN AQUÍ (era False)
+    botonAcusacionFinal.disabled = true;
+    botonAcusacionFinal.classList.add('opacity-50', 'cursor-not-allowed');
+    
+    // Comprobar la solución
+    if (culpable_guess === solucion_secreta.culpable &&
+        arma_guess === solucion_secreta.arma &&
+        locacion_guess === solucion_secreta.locacion) {
+        
+        // --- ¡VICTORIA! ---
+        const titulo_victoria = "¡Resuelto! ¡Eres un gran detective!";
+        const historia = `¡HAS RESUELTO EL CRIMEN!\n\n${solucion_secreta.narrativa}`;
+        mostrarEndGameModal(titulo_victoria, historia, true);
+        
+    } else {
+        // --- DERROTA (Con la lógica de tu profe) ---
+        const titulo_derrota = "¡Caso Fallido! El culpable escapó.";
+        let mensaje_error = "Tu acusación fue incorrecta.\n\n";
+        
+        if (culpable_guess !== solucion_secreta.culpable) {
+            mensaje_error += `* ${culpable_guess} era inocente. Su coartada fue confirmada por los interrogatorios.\n`;
+        }
+        if (locacion_guess !== solucion_secreta.locacion) {
+            mensaje_error += `* ${locacion_guess} es errónea. El reporte forense la descartó (estaba limpia).\n`;
+        }
+        if (arma_guess !== solucion_secreta.arma) {
+            mensaje_error += `* ${arma_guess} es errónea. El análisis forense la descartó (estaba limpia).\n`;
+        }
+        
+        mensaje_error += `\nLa solución correcta era:\n${solucion_secreta.culpable} con el ${solucion_secreta.arma} en ${solucion_secreta.locacion}.`
+
+        mostrarEndGameModal(titulo_derrota, mensaje_error, false);
+    }
+}
+
+
+// --- 7. FUNCIONES DE LA INTERFAZ (Nuevas) ---
+
+// --- Funciones de Modales ---
+function mostrarInfoModal(titulo, cuerpo) {
+    infoModalTitle.textContent = titulo;
+    infoModalBody.textContent = cuerpo;
+    infoModal.classList.remove('hidden');
+}
+
+function mostrarConfirmModal(cuerpo, onConfirm) {
+    confirmModalBody.textContent = cuerpo;
+    confirmModal.classList.remove('hidden');
+    
+    // Asignamos el evento de confirmación
+    // Usamos .onclick para sobrescribir cualquier listener anterior
+    confirmYes.onclick = () => {
+        confirmModal.classList.add('hidden');
+        onConfirm(); // Ejecuta la acción de confirmación
+    };
+}
+
+function mostrarEndGameModal(titulo, cuerpo, victoria) {
+    endGameModalTitle.textContent = titulo;
+    endGameModalBody.textContent = cuerpo;
+    
+    if (victoria) {
+        endGameModalTitle.classList.remove('text-red-500');
+        endGameModalTitle.classList.add('text-green-500');
+    } else {
+        endGameModalTitle.classList.remove('text-green-500');
+        endGameModalTitle.classList.add('text-red-500');
+    }
+    
+    endGameModal.classList.remove('hidden');
+}
+
+// --- Funciones para poblar la UI ---
+
+function crearIcono(categoria) {
+    const svgNS = "http://www.w3.org/2000/svg";
+    const svg = document.createElementNS(svgNS, "svg");
+    svg.setAttribute("class", "w-6 h-6 text-yellow-400");
+    svg.setAttribute("fill", "none");
+    svg.setAttribute("viewBox", "0 0 24 24");
+    svg.setAttribute("stroke", "currentColor");
+    svg.setAttribute("stroke-width", "2");
+
+    const path = document.createElementNS(svgNS, "path");
+    path.setAttribute("stroke-linecap", "round");
+    path.setAttribute("stroke-linejoin", "round");
+
+    let d = "";
+    if (categoria === 'personaje') {
+        d = "M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"; // Icono de usuario
+    } else if (categoria === 'arma') {
+        d = "M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4"; // Icono de llave inglesa/herramienta
+    } else { // locacion
+        d = "M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0zM12 11a3 3 0 100-6 3 3 0 000 6z"; // Icono de pin de mapa
+    }
+    path.setAttribute("d", d);
+    svg.appendChild(path);
+    return svg;
+}
+
+function generarTarjetasInvestigacion() {
+    // Limpiar contenedores
+    personajesContainer.innerHTML = '';
+    armasContainer.innerHTML = '';
+    locacionesContainer.innerHTML = '';
+
+    // Generar tarjetas de PERSONAJES
+    PERSONAJES.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'bg-gray-800 p-4 rounded-lg shadow-lg flex items-center justify-between transition-all duration-200 hover:bg-gray-700';
+        
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'flex items-center gap-3 overflow-hidden';
+        // Usamos textContent para el título para evitar problemas de HTML
+        const span = document.createElement('span');
+        span.className = 'font-medium truncate';
+        span.textContent = item;
+        span.title = item;
+        
+        infoDiv.innerHTML = crearIcono('personaje').outerHTML;
+        infoDiv.appendChild(span);
+        
+        const button = document.createElement('button');
+        button.className = 'boton-investigar bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-3 rounded-md transition-colors duration-200 flex-shrink-0';
+        button.textContent = 'Investigar';
+        // Asignación programática del evento click para manejar correctamente las comillas
+        button.addEventListener('click', () => investigar('personaje', item)); 
+        
+        card.appendChild(infoDiv);
+        card.appendChild(button);
+        personajesContainer.appendChild(card);
+    });
+
+    // Generar tarjetas de ARMAS
+    ARMAS.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'bg-gray-800 p-4 rounded-lg shadow-lg flex items-center justify-between transition-all duration-200 hover:bg-gray-700';
+
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'flex items-center gap-3 overflow-hidden';
+        
+        const span = document.createElement('span');
+        span.className = 'font-medium truncate';
+        span.textContent = item;
+        span.title = item;
+        
+        infoDiv.innerHTML = crearIcono('arma').outerHTML;
+        infoDiv.appendChild(span);
+
+        const button = document.createElement('button');
+        button.className = 'boton-investigar bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-3 rounded-md transition-colors duration-200 flex-shrink-0';
+        button.textContent = 'Investigar';
+        // Asignación programática del evento click
+        button.addEventListener('click', () => investigar('arma', item)); 
+
+        card.appendChild(infoDiv);
+        card.appendChild(button);
+        armasContainer.appendChild(card);
+    });
+
+    // Generar tarjetas de LOCACIONES
+    LOCACIONES.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'bg-gray-800 p-4 rounded-lg shadow-lg flex items-center justify-between transition-all duration-200 hover:bg-gray-700';
+        
+        const infoDiv = document.createElement('div');
+        infoDiv.className = 'flex items-center gap-3 overflow-hidden';
+        
+        const span = document.createElement('span');
+        span.className = 'font-medium truncate';
+        span.textContent = item;
+        span.title = item;
+        
+        infoDiv.innerHTML = crearIcono('locacion').outerHTML;
+        infoDiv.appendChild(span);
+        
+        const button = document.createElement('button');
+        button.className = 'boton-investigar bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold py-2 px-3 rounded-md transition-colors duration-200 flex-shrink-0';
+        button.textContent = 'Investigar';
+        // Asignación programática del evento click
+        button.addEventListener('click', () => investigar('locacion', item)); 
+        
+        card.appendChild(infoDiv);
+        card.appendChild(button);
+        locacionesContainer.appendChild(card);
+    });
+}
+
+function poblarSelectsAcusacion() {
+    // CORRECCIÓN: Crear elementos <option> programáticamente para asignar
+    // el .value directamente, evitando errores de HTML con las comillas.
+    [comboPersonajeFinal, comboArmaFinal, comboLocacionFinal].forEach(select => {
+        select.innerHTML = ''; // Limpiar select
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Selecciona...';
+        defaultOption.disabled = true;
+        defaultOption.selected = true;
+        select.appendChild(defaultOption);
+    });
+
+    PERSONAJES.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item; // Asigna el valor real (ej: Victoria "Vicky" Rojas)
+        option.textContent = item;
+        comboPersonajeFinal.appendChild(option);
+    });
+    ARMAS.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        option.textContent = item;
+        comboArmaFinal.appendChild(option);
+    });
+    LOCACIONES.forEach(item => {
+        const option = document.createElement('option');
+        option.value = item;
+        option.textContent = item;
+        comboLocacionFinal.appendChild(option);
+    });
+}
+
+
+// --- 8. INICIAR EL JUEGO ---
+// Esperar a que el DOM esté cargado para asignar variables y listeners
+document.addEventListener('DOMContentLoaded', () => {
+    
+    // Asignar elementos del DOM
+    labelIntentosVisual = document.getElementById('intentos-visual');
+    pistaLinea1 = document.getElementById('pista-linea-1');
+    pistaLinea2 = document.getElementById('pista-linea-2');
+    pistaLinea3 = document.getElementById('pista-linea-3');
+    pistaLinea4 = document.getElementById('pista-linea-4');
+    
+    comboPersonajeFinal = document.getElementById('combo-personaje-final');
+    comboArmaFinal = document.getElementById('combo-arma-final');
+    comboLocacionFinal = document.getElementById('combo-locacion-final');
+    
+    botonAcusacionFinal = document.getElementById('boton-acusacion-final');
+    botonReiniciar = document.getElementById('boton-reiniciar');
+
+    personajesContainer = document.getElementById('personajes-container');
+    armasContainer = document.getElementById('armas-container');
+    locacionesContainer = document.getElementById('locaciones-container');
+
+    // Modales
+    infoModal = document.getElementById('infoModal');
+    infoModalTitle = document.getElementById('infoModal-title');
+    infoModalBody = document.getElementById('infoModal-body');
+    infoModalClose = document.getElementById('infoModal-close');
+
+    confirmModal = document.getElementById('confirmModal');
+    confirmModalTitle = document.getElementById('confirmModal-title');
+    confirmModalBody = document.getElementById('confirmModal-body');
+    confirmYes = document.getElementById('confirm-yes');
+    confirmNo = document.getElementById('confirm-no');
+
+    endGameModal = document.getElementById('endGameModal');
+    endGameModalTitle = document.getElementById('endGameModal-title');
+    endGameModalBody = document.getElementById('endGameModal-body');
+    endGameModalClose = document.getElementById('endGameModal-close');
+
+    // Asignar Event Listeners
+    botonAcusacionFinal.addEventListener('click', hacer_acusacion_final);
+    botonReiniciar.addEventListener('click', reiniciar_juego);
+
+    // Listeners para cerrar modales
+    infoModalClose.addEventListener('click', () => infoModal.classList.add('hidden'));
+    confirmNo.addEventListener('click', () => confirmModal.classList.add('hidden'));
+    endGameModalClose.addEventListener('click', () => endGameModal.classList.add('hidden'));
+
+    // Generar la UI dinámica
+    generarTarjetasInvestigacion();
+    poblarSelectsAcusacion();
+
+    // Iniciar el primer juego
+    reiniciar_juego();
+});
+
+    </script>
+</body>
+</html>
+
+

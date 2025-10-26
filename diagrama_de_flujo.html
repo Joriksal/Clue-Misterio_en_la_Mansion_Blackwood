@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diagrama de Flujo - Misterio en la Mansión</title>
+    <style>
+        /* Estilos para que se vea bien en un tema claro */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff; /* Cambiado a blanco */
+            color: #333333; /* Cambiado a oscuro para legibilidad */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        h1 {
+            color: #ef4444; /* Color rojo para el título */
+        }
+    </style>
+</head>
+<body>
+    <h1>Diagrama de Flujo del Juego</h1>
+    <p>Este es el flujo lógico del clue "Misterio en la Mansión Blackwood".</p>
+    
+    <!-- Contenedor del diagrama Mermaid -->
+    <!-- El script de Mermaid buscará elementos con class="mermaid" y los renderizará -->
+    <pre class="mermaid">
+        graph TD;
+            A((INICIO)) --> B["Llamar a reiniciar_juego()"];
+            
+            B --> B1["Elegir Solución Secreta (Random)"];
+            B1 --> B2["Reiniciar Intentos a 5"];
+            B2 --> B3["Mostrar UI y Modal de Introducción"];
+            B3 --> C{"Esperar Acción del Usuario"};
+            
+            C -- "Clic en 'Jugar de Nuevo'" --> B;
+            
+            C -- "Clic en 'Investigar'" --> D["Llamar a investigar(ítem)"];
+            D --> E{"¿Quedan intentos? (intentos > 0)"};
+            
+            E -- "Sí" --> F["Restar 1 intento"];
+            F --> G{"¿Ítem es parte de la Solución Secreta?"};
+            G -- "No (Es Inocente)" --> H["Buscar info en ALIBIS_DATABASE"];
+            G -- "Sí (Es Culpable)" --> I["Generar Pista Falsa / Contradictoria"];
+            H --> J["Actualizar Panel de Pista"];
+            I --> J;
+            J --> K["Actualizar Contador Visual"];
+            K --> L{"¿Intentos == 0?"};
+            L -- "Sí" --> M["Deshabilitar Botones de Investigación"];
+            M --> C;
+            L -- "No" --> C;
+            
+            E -- "No" --> C;
+            
+            C -- "Clic en 'Acusación Final'" --> N["Llamar a hacer_acusacion_final()"];
+            N --> O{"¿Campos completos?"};
+            O -- "No" --> P["Mostrar Modal: Acusación Incompleta"];
+            P --> C;
+            
+            O -- "Sí" --> Q{"Mostrar Modal: ¿Confirmar?"};
+            Q -- "No" --> C;
+            
+            Q -- "Sí" --> R["Llamar a procesar_acusacion()"];
+            R --> S{"¿Acusación == Solución Secreta?"};
+            S -- "Sí (Victoria)" --> T["Mostrar Modal de Victoria + Narrativa"];
+            S -- "No (Derrota)" --> U["Mostrar Modal de Derrota + Solución"];
+            T --> V((FIN DE PARTIDA));
+            U --> V;
+    </pre>
+
+    <!-- Cargar el script de Mermaid.js -->
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ startOnLoad: true, theme: 'default' }); /* Cambiado a tema 'default' (claro) */
+    </script>
+</body>
+</html>
+
